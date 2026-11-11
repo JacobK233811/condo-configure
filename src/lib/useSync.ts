@@ -94,11 +94,12 @@ export function useSync(doc: Doc, replaceDoc: (d: Doc) => void) {
     let pushAfter = false;
     try {
       const r = await readGist(m.token, m.gistId);
+      const dirty = !!metaRef.current.dirty;
       if (r.updatedAt === m.remoteUpdatedAt) {
-        pushAfter = !!m.dirty;
+        pushAfter = dirty;
         setError(null);
         setStatus('synced');
-      } else if (!m.dirty) {
+      } else if (!dirty) {
         adopt(r);
       } else {
         setConflict({ ...r, reason: 'diverged' });
