@@ -15,8 +15,12 @@ export function isDoc(x: unknown): x is Doc {
     !!d &&
     d.version === 1 &&
     Array.isArray(d.items) &&
+    d.items.every(
+      (i) => !!i && typeof i.id === 'string' && typeof i.name === 'string' && i.width > 0 && i.depth > 0,
+    ) &&
     Array.isArray(d.layouts) &&
     d.layouts.length > 0 &&
+    d.layouts.every((l) => !!l && typeof l.id === 'string' && Array.isArray(l.placements)) &&
     typeof d.activeLayoutId === 'string'
   );
 }
