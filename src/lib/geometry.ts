@@ -77,7 +77,7 @@ export function worldPolys(item: Item, p: Placement): Pt[][] {
 }
 
 export function localClearanceRect(item: Item): Rect | null {
-  if (item.shape === 'circle' || item.clearanceFront <= 0) return null;
+  if (item.clearanceFront <= 0) return null;
   const d = itemDepth(item);
   return { x: -item.width / 2, y: d / 2, w: item.width, h: item.clearanceFront };
 }
