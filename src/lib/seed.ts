@@ -27,7 +27,7 @@ export function seedDoc(): Doc {
         placements: [
           { itemId: 'seed-queen-bed', x: 50, y: 70, rotation: 270 },
           { itemId: 'seed-nightstand', x: 15, y: 114, rotation: 270 },
-          { itemId: 'seed-dresser', x: 124, y: 126, rotation: 90 },
+          { itemId: 'seed-dresser', x: 117.5, y: 120, rotation: 90 },
         ],
       },
     ],
