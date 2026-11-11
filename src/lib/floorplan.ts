@@ -2,10 +2,12 @@ import type { Pt } from './types';
 
 /**
  * The unit's floor plan, traced from the builder's drawing at ~21 px/ft and
- * reconciled with the labelled room sizes and the 810 sq ft total.
+ * corrected to Jacob's field measurements (bedroom 100" to the balcony jog ×
+ * 136", living 181" × 130", den 105" × 102" to the railing, stairs 29" + 94").
+ * The outer shell is unchanged (~810 sq ft).
  * Units are inches; origin is the outside top-left corner of the unit,
  * +x to the right (east), +y down (south, towards the front door).
- * Room sizes labelled on the plan are exact; everything else is traced.
+ * Field-measured spans are exact; everything else is traced.
  */
 
 export interface Rect {
@@ -47,7 +49,7 @@ export const WALL_RECTS: Rect[] = [
   // exterior: north piers (between windows), corner notches
   r(0, 0, 42, 10),
   r(0, 10, 23, 12),
-  r(108.5, 0, 36, 10),
+  r(101, 0, 36, 10),
   r(210, 0, 34, 10),
   r(274.5, 0, 42.5, 10),
   r(296.5, 10, 14.5, 12),
@@ -60,26 +62,26 @@ export const WALL_RECTS: Rect[] = [
   r(183, 351, 17, 8),
   r(200, 351, 117, 16),
   // bedroom jog by the balcony
-  r(113.5, 10, 3, 20),
-  r(113.5, 28.5, 23, 2.5),
-  r(134, 28.5, 2.5, 11.5),
-  // bedroom / living wall (barn door opening is y 40 → 84)
-  r(134, 84, 2.5, 68),
+  r(106, 10, 3, 20),
+  r(106, 28.5, 24, 2.5),
+  r(127.5, 28.5, 2.5, 11.5),
+  // bedroom / living wall (barn door opening is y 40 → 82)
+  r(127.5, 82, 2.5, 66.5),
   // walk-in closet
-  r(6, 150, 49.5, 2.5),
-  r(53.5, 150, 2.25, 34),
+  r(6, 146, 49.5, 2.5),
+  r(53.5, 146, 2.25, 38),
   r(53.5, 214.5, 2.25, 34.5),
   r(6, 246, 52.5, 3),
   // reach-in closet + pantry
-  r(97, 150, 39.5, 2.5),
-  r(97, 150, 2.25, 15),
-  r(97, 197, 2.25, 8),
-  r(123, 152, 2.5, 53),
+  r(90.5, 146, 39.5, 2.5),
+  r(90.5, 146, 2.25, 19),
+  r(90.5, 197, 2.25, 8),
+  r(116.5, 148.5, 2.5, 56.5),
   // washer / dryer
-  r(97, 204.5, 40.5, 3),
-  r(97, 204.5, 2.5, 38),
-  r(135, 204.5, 2.5, 38),
-  r(91.5, 240, 46, 6.5),
+  r(90.5, 204.5, 40.5, 3),
+  r(90.5, 204.5, 2.5, 38),
+  r(128.5, 204.5, 2.5, 38),
+  r(90.5, 240, 40.5, 6.5),
   r(103, 246, 2.75, 9),
   // bath / shower / foyer closet
   r(103.5, 287, 2.75, 64),
@@ -88,21 +90,21 @@ export const WALL_RECTS: Rect[] = [
   r(131.25, 292.5, 2.25, 7.5),
   r(131.25, 345, 2.25, 6),
   // kitchen + den piers
-  r(285.5, 150.75, 25.5, 2.75),
-  r(297, 227, 14, 23.5),
+  r(285.5, 140, 25.5, 2.75),
+  r(297, 227, 14, 22),
   r(301, 303, 10, 15),
 ];
 
 export const DIAGONAL_WALLS: Pt[][] = [
   segPoly([55.75, 214.5], [77, 192], 2.25),
-  segPoly([73.5, 187.5], [98.5, 164.75], 2.25),
+  segPoly([73.5, 187.5], [92, 164.75], 2.25),
 ];
 
 /** Windows and the balcony slider: they block furniture like walls. */
-export const GLASS_RECTS: Rect[] = [r(42, 0, 66.5, 10), r(144.5, 0, 65.5, 10), r(244, 0, 30.5, 10)];
+export const GLASS_RECTS: Rect[] = [r(42, 0, 59, 10), r(137, 0, 73, 10), r(244, 0, 30.5, 10)];
 
 /** Balcony railing. */
-export const RAILING_RECTS: Rect[] = [r(110, -56, 132, 2), r(110, -56, 2, 56), r(240, -56, 2, 56)];
+export const RAILING_RECTS: Rect[] = [r(102.5, -56, 132, 2), r(102.5, -56, 2, 56), r(232.5, -56, 2, 56)];
 
 export type ObstacleKind = 'counter' | 'island' | 'stairs' | 'railing' | 'pantry';
 export interface Obstacle {
@@ -114,12 +116,12 @@ export interface Obstacle {
 /** Built-ins furniture can't overlap. */
 export const OBSTACLES: Obstacle[] = [
   { kind: 'island', rect: r(184.5, 149.5, 63.5, 35.5), label: 'Island' },
-  { kind: 'counter', rect: r(286.5, 153.5, 24.5, 69) },
-  { kind: 'counter', rect: r(183.5, 221.5, 113.5, 28.75) },
-  { kind: 'stairs', rect: r(185.5, 250.25, 30.5, 37) },
-  { kind: 'railing', rect: r(186.5, 286.5, 40, 2.75) },
-  { kind: 'railing', rect: r(185.75, 289, 3, 62) },
-  { kind: 'pantry', rect: r(134.5, 152, 2, 53) },
+  { kind: 'counter', rect: r(286.5, 142.75, 24.5, 78.75) },
+  { kind: 'counter', rect: r(183.5, 221.5, 113.5, 27.5) },
+  { kind: 'stairs', rect: r(188, 249, 29, 21.25) },
+  { kind: 'railing', rect: r(188, 270.25, 29, 2.75) },
+  { kind: 'railing', rect: r(203, 273, 3, 78) },
+  { kind: 'pantry', rect: r(128, 150, 2, 52) },
 ];
 
 /** Areas that aren't floor space for furniture (closets, bath, laundry). */
@@ -129,10 +131,10 @@ export interface Zone {
   pattern: 'closet' | 'tile' | 'laundry';
 }
 export const ZONES: Zone[] = [
-  { name: 'Walk-in closet', rect: r(6, 152.5, 47.5, 93.5), pattern: 'closet' },
-  { name: 'Closet', rect: r(99.25, 152.5, 23.75, 44.5), pattern: 'closet' },
-  { name: 'P', rect: r(125.5, 152.5, 9, 52), pattern: 'closet' },
-  { name: 'W/D', rect: r(99.5, 207.5, 35.5, 32.5), pattern: 'laundry' },
+  { name: 'Walk-in closet', rect: r(6, 148.5, 47.5, 97.5), pattern: 'closet' },
+  { name: 'Closet', rect: r(92.75, 148.5, 23.75, 48.5), pattern: 'closet' },
+  { name: 'P', rect: r(119, 148.5, 8.5, 56), pattern: 'closet' },
+  { name: 'W/D', rect: r(93, 207.5, 35.5, 32.5), pattern: 'laundry' },
   { name: 'Bath', rect: r(6, 249, 97.5, 102), pattern: 'tile' },
   { name: 'Closet', rect: r(106.25, 295.25, 25, 55.75), pattern: 'closet' },
 ];
@@ -145,17 +147,17 @@ export interface Room {
   label: Pt;
 }
 export const ROOMS: Room[] = [
-  { name: 'Bedroom', dims: `10' 6" × 11' 9"`, rect: r(6, 10, 128, 140), floor: 'carpet', label: [70, 80] },
-  { name: 'Living / dining', dims: `14' 6" × 12' 0"`, rect: r(136.5, 10, 174.5, 141), floor: 'wood', label: [224, 72] },
-  { name: 'Kitchen', rect: r(136.5, 150, 174.5, 72), floor: 'wood', label: [262, 202] },
-  { name: 'Den (loft)', dims: `10' 3" × 8' 3"`, rect: r(185.5, 250, 125.5, 101), floor: 'wood', label: [252, 318] },
-  { name: 'Foyer', rect: r(106, 205, 80, 146), floor: 'wood', label: [158, 268] },
-  { name: '', rect: r(55.75, 152.5, 41.5, 94), floor: 'carpet', label: [0, 0] },
-  { name: 'Balcony', dims: '55 sq ft', rect: r(112, -54, 128, 54), floor: 'wood', label: [176, -30] },
+  { name: 'Bedroom', dims: `10' 1½" × 11' 4"`, rect: r(6, 10, 121.5, 136), floor: 'carpet', label: [66, 80] },
+  { name: 'Living / dining', dims: `15' 1" × 10' 10"`, rect: r(130, 10, 181, 130), floor: 'wood', label: [220, 68] },
+  { name: 'Kitchen', rect: r(130, 140, 181, 82), floor: 'wood', label: [262, 202] },
+  { name: 'Den (loft)', dims: `8' 9" × 8' 6"`, rect: r(206, 249, 105, 102), floor: 'wood', label: [258, 312] },
+  { name: 'Foyer', rect: r(106, 205, 100, 146), floor: 'wood', label: [158, 268] },
+  { name: '', rect: r(55.75, 148.5, 41.25, 98), floor: 'carpet', label: [0, 0] },
+  { name: 'Balcony', dims: '55 sq ft', rect: r(104.5, -54, 128, 54), floor: 'wood', label: [168.5, -30] },
 ];
 
 /** Regions a piece must stay inside. */
-export const FLOOR_BOUNDS: Rect[] = [r(6, 10, 305, 341), r(112, -54, 128, 54)];
+export const FLOOR_BOUNDS: Rect[] = [r(6, 10, 305, 341), r(104.5, -54, 128, 54)];
 
 export interface Door {
   hinge: Pt;
@@ -167,10 +169,10 @@ export interface Door {
 }
 export const DOORS: Door[] = [
   { hinge: [183, 353], radius: 36, closed: 180, open: 225 }, // front door
-  { hinge: [91.5, 247.5], radius: 31, closed: 180, open: 225 }, // bath (from bedroom hall)
+  { hinge: [90.5, 247.5], radius: 30, closed: 180, open: 225 }, // bath (from bedroom hall)
   { hinge: [104.75, 287], radius: 32, closed: 270, open: 225 }, // bath (from foyer)
   { hinge: [77, 192], radius: 22.5, closed: 201, open: 133 }, // walk-in
-  { hinge: [73.5, 187.5], radius: 26.5, closed: 22, open: -42 }, // reach-in
+  { hinge: [73.5, 187.5], radius: 19.5, closed: 29, open: -35 }, // reach-in
 ];
 
 /** Bifold foyer closet doors and the barn door panel (parked open). */
@@ -184,7 +186,7 @@ export const BIFOLD_LINES: [Pt, Pt][] = [
     [148.5, 331],
   ],
 ];
-export const BARN_DOOR: Rect = r(137, 76.5, 2.25, 46.5);
+export const BARN_DOOR: Rect = r(130.5, 76.5, 2.25, 46.5);
 
 /** Where the builder's drawing sits in plan coordinates (for the reference underlay). */
 export const REFERENCE_IMAGE = {

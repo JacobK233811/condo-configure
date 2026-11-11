@@ -155,10 +155,10 @@ function StaticPlan({ showGrid }: { showGrid: boolean }) {
         <rect x={69.5} y={295.5} width={33.5} height={47} fill="none" strokeDasharray="1.5 1.5" />
       </g>
       {/* laundry + closet rods */}
-      <rect x={104} y={211} width={27} height={25} fill="#fff" stroke="#8d8a85" strokeWidth={0.6} rx={1} />
+      <rect x={97} y={211} width={27} height={25} fill="#fff" stroke="#8d8a85" strokeWidth={0.6} rx={1} />
       <g stroke="#a59d91" strokeWidth={0.6} strokeDasharray="2 1.5">
-        <line x1={14} y1={160} x2={14} y2={240} />
-        <line x1={110} y1={156} x2={110} y2={196} />
+        <line x1={14} y1={156} x2={14} y2={240} />
+        <line x1={104} y1={152} x2={104} y2={196} />
         <line x1={118} y1={298} x2={118} y2={348} />
       </g>
       {ZONES.map((z, i) => (
@@ -187,11 +187,11 @@ function StaticPlan({ showGrid }: { showGrid: boolean }) {
         />
       ))}
       <g stroke="#8f877b" strokeWidth={0.5} fill="none">
-        {[193, 200.5, 208].map((x) => (
-          <line key={x} x1={x} y1={250.5} x2={x} y2={287} />
+        {[195.25, 202.5, 209.75].map((x) => (
+          <line key={x} x1={x} y1={249} x2={x} y2={270.25} />
         ))}
-        <line x1={185.5} y1={268.75} x2={213} y2={268.75} />
-        <path d="M 209 266.5 L 213 268.75 L 209 271" />
+        <line x1={189} y1={264} x2={215} y2={264} />
+        <path d="M 211 261.75 L 215 264 L 211 266.25" />
         <line x1={187} y1={158} x2={246} y2={158} strokeDasharray="1.5 1.5" />
         <rect x={188} y={224} width={37} height={26} fill="#f4f2ee" />
         <rect x={227} y={224} width={27} height={25} strokeDasharray="1.2 1.2" />
@@ -209,7 +209,7 @@ function StaticPlan({ showGrid }: { showGrid: boolean }) {
         <text x={206.5} y={237}>Ref.</text>
         <text x={240.5} y={236.5}>DW</text>
         <text x={216} y={167}>Island</text>
-        <text x={201} y={262.5} fontSize={4.5}>Up</text>
+        <text x={199} y={256} fontSize={4.5}>Up</text>
       </g>
       {/* walls */}
       <g fill="#2d2a26">
@@ -247,7 +247,7 @@ function StaticPlan({ showGrid }: { showGrid: boolean }) {
         ))}
       </g>
       <rect {...rectProps(BARN_DOOR)} fill="#8b6a4a" />
-      <text x={141} y={100} fontSize={4} fill="#6f675c" transform="rotate(90 141 100)" textAnchor="middle">
+      <text x={134.5} y={100} fontSize={4} fill="#6f675c" transform="rotate(90 134.5 100)" textAnchor="middle">
         barn door
       </text>
       {/* room labels */}
