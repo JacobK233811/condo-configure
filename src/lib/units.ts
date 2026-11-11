@@ -3,7 +3,10 @@ export function parseLength(input: string): number | null {
   const s = input.trim().toLowerCase().replace(/[”″]/g, '"').replace(/[’′]/g, "'");
   if (!s) return null;
   const cm = s.match(/^(\d+(?:\.\d+)?)\s*cm$/);
-  if (cm) return round(parseFloat(cm[1]) / 2.54);
+  if (cm) {
+    const inches = round(parseFloat(cm[1]) / 2.54);
+    return inches > 0 ? inches : null;
+  }
   const ftIn = s.match(
     /^(?:(\d+(?:\.\d+)?)\s*(?:'|ft|feet|foot))?\s*(?:(\d+(?:\.\d+)?)\s*(?:"|in|inches|inch)?)?$/,
   );
