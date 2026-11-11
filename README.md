@@ -6,7 +6,15 @@ Drag-and-drop furniture planner for an 810 sq ft condo (bedroom, living/dining, 
 - **Plan**: drag cards onto the plan; pieces snap to a 3" grid and to walls/other furniture (hold Alt to move freely). Press R or use the handle to rotate. Red = overlapping a wall, built-in or another piece; amber = front clearance blocked.
 - **Layouts**: keep several named layouts of the same inventory. Undo/redo, tape measure, PNG export, JSON backup/restore.
 
-Everything is saved in your browser (localStorage). Use **Menu → Back up** to move data between browsers.
+## Saving
+
+- Every change saves to this browser's localStorage; the app asks the browser to keep it from being evicted. The top-bar chip shows whether you've backed up since your last change.
+- **Menu → Saving & sync** downloads/restores a JSON backup (photos included).
+- **GitHub sync**: paste a fine-grained token with only *Account permissions → Gists: Read and write*. The app keeps everything in a private gist (`condo-configure.json`), pushes ~2 s after each change, re-reads on load/tab focus, and asks which copy to keep if two devices diverge. The token stays in that browser.
+
+## Hosting
+
+`.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main`. Enable it once under **Settings → Pages → Source: GitHub Actions**.
 
 ## Develop
 

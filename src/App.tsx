@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import { Inspector } from './components/Inspector';
 import { ItemEditor } from './components/ItemEditor';
+import { StorageDialog } from './components/StorageDialog';
 import { PlanCanvas, type CanvasHandle, type Measure, type Tool, type ViewSettings } from './components/PlanCanvas';
 import { Thumb } from './components/Thumb';
 import { TopBar } from './components/TopBar';
@@ -11,6 +12,7 @@ import { analyzeLayout, normAngle, placedRects, snapPosition } from './lib/geome
 import { seedDoc } from './lib/seed';
 import { isDoc, uid, useDocStore } from './lib/store';
 import type { Doc, Item, Layout, Placement, Pt } from './lib/types';
+import { ago, useSync, type Sync } from './lib/useSync';
 
 const VIEW_KEY = 'condo-configure:view';
 const DEFAULT_VIEW: ViewSettings = { snap: true, showClearance: true, showPhotos: false, showReference: false, showGrid: true };
@@ -21,6 +23,19 @@ function loadView(): ViewSettings {
   } catch {
     return DEFAULT_VIEW;
   }
+}
+
+function saveChip(sync: Sync) {
+  const m = sync.meta;
+  if (sync.connected) {
+    if (sync.status === 'conflict') return { tone: 'warn', label: 'Sync conflict', title: 'Choose which version to keep' } as const;
+    if (sync.status === 'error') return { tone: 'bad', label: 'Sync error', title: sync.error ?? '' } as const;
+    if (sync.status === 'saving' || m.dirty) return { tone: 'muted', label: 'Syncing…', title: 'Saving to your GitHub gist' } as const;
+    return { tone: 'ok', label: 'Synced', title: `Saved to GitHub ${ago(m.lastSyncedAt)}` } as const;
+  }
+  const unbacked = (m.lastChangeAt ?? 0) > (m.lastBackupAt ?? 0);
+  if (unbacked) return { tone: 'warn', label: 'Not backed up', title: `Saved in this browser only. Last backup: ${ago(m.lastBackupAt)}` } as const;
+  return { tone: 'muted', label: 'Saved in browser', title: 'Saved in this browser' } as const;
 }
 
 interface TrayPress {
@@ -39,6 +54,9 @@ export default function App() {
   const [tool, setTool] = useState<Tool>('select');
   const [settings, setSettingsState] = useState<ViewSettings>(loadView);
   const [editor, setEditor] = useState<{ item: Item | null } | null>(null);
+  const [storageOpen, setStorageOpen] = useState(false);
+  const replaceDoc = useCallback((d: Doc) => apply(() => d), [apply]);
+  const sync = useSync(doc, replaceDoc);
   const [measures, setMeasures] = useState<Measure[]>([]);
   const [zoomPct, setZoomPct] = useState(100);
   const [press, setPress] = useState<TrayPress | null>(null);
@@ -186,8 +204,10 @@ export default function App() {
   };
 
   // --- import / export ---
-  const exportJson = () =>
+  const exportJson = () => {
     download(`condo-configure-${new Date().toISOString().slice(0, 10)}.json`, new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' }));
+    sync.markBackedUp();
+  };
   const importJson = async (f: File | undefined) => {
     if (!f) return;
     try {
@@ -260,7 +280,7 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
-      if (editor || t.closest('input, textarea, select')) return;
+      if (editor || storageOpen || t.closest('input, textarea, select')) return;
       const mod = e.ctrlKey || e.metaKey;
       const k = e.key.toLowerCase();
       if (mod && k === 'z') {
@@ -309,7 +329,7 @@ export default function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [editor, press, tool, selectedId, layout, undo, redo, duplicate, rotateTo, removeFromPlan, patchPlacement]);
+  }, [editor, storageOpen, press, tool, selectedId, layout, undo, redo, duplicate, rotateTo, removeFromPlan, patchPlacement]);
 
   const selItem = selectedId ? itemsById.get(selectedId) : undefined;
   const selPlacement = selectedId ? layout.placements.find((p) => p.itemId === selectedId) : undefined;
@@ -341,6 +361,8 @@ export default function App() {
         onExportPng={exportPng}
         onExportJson={exportJson}
         onImportJson={() => importRef.current?.click()}
+        saveChip={saveChip(sync)}
+        onOpenStorage={() => setStorageOpen(true)}
         onReset={() => {
           if (confirm('Replace your inventory and layouts with the sample data? Back up first if you want to keep them.')) {
             apply(() => seedDoc());
@@ -418,6 +440,9 @@ export default function App() {
           <Thumb item={dragItem} size={48} />
           <span>{dragItem.name}</span>
         </div>
+      )}
+      {(storageOpen || sync.conflict) && (
+        <StorageDialog sync={sync} onExportJson={exportJson} onImportJson={() => importRef.current?.click()} onClose={() => setStorageOpen(false)} />
       )}
       {editor && <ItemEditor initial={editor.item} onSave={saveItem} onCancel={() => setEditor(null)} />}
     </div>

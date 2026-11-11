@@ -172,3 +172,25 @@ select.tag { cursor: pointer; }
   .inspector { position: absolute; right: 0; top: 0; bottom: 0; z-index: 20; width: 280px; box-shadow: -8px 0 24px rgba(0,0,0,.2); }
   .topbar { flex-wrap: wrap; }
 }
+
+/* saving & sync ---------------------------------------------------------- */
+.save-chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid #3c5068; background: #273647; color: #c7d2de; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.save-chip:hover { background: #31445a; }
+.save-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: #8a99aa; }
+.save-chip.ok .dot { background: #3fae5a; }
+.save-chip.warn { border-color: #b9800f; color: #f6d48d; }
+.save-chip.warn .dot { background: #f2b134; }
+.save-chip.bad { border-color: #e5484d; color: #ffb4b4; }
+.save-chip.bad .dot { background: #e5484d; }
+.modal.storage { width: min(560px, 100%); }
+.st-section { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid #eee5d3; }
+.st-section:last-child { border-bottom: 0; }
+.st-section h3 { margin: 0; font-size: 14px; }
+.st-section p, .st-conflict p { margin: 0; font-size: 13px; color: #4a4338; line-height: 1.45; }
+.st-section a { color: #2f6fca; }
+.st-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.st-ok { color: #1b6b35 !important; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.st-warn { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; background: #fdf3dc; color: #6b4300; border-radius: 10px; padding: 8px 10px; font-size: 12.5px; }
+.st-steps { margin: 0; padding-left: 20px; font-size: 13px; color: #4a4338; display: flex; flex-direction: column; gap: 4px; }
+.st-token { flex: 1; min-width: 200px; height: 34px; border: 1px solid #d9cfba; border-radius: 8px; padding: 0 10px; background: #fff; font-family: ui-monospace, monospace; font-size: 13px; }
+.st-conflict { background: #fdf3dc; border: 1px solid #f2b134; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }

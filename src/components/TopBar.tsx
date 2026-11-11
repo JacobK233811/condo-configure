@@ -40,6 +40,8 @@ interface Props {
   onExportJson(): void;
   onImportJson(): void;
   onReset(): void;
+  saveChip: { tone: 'ok' | 'warn' | 'bad' | 'muted'; label: string; title: string };
+  onOpenStorage(): void;
 }
 
 export function TopBar(p: Props) {
@@ -78,6 +80,10 @@ export function TopBar(p: Props) {
       </nav>
 
       <div className="tools">
+        <button type="button" className={`save-chip ${p.saveChip.tone}`} title={p.saveChip.title} onClick={p.onOpenStorage}>
+          <span className="dot" />
+          {p.saveChip.label}
+        </button>
         <div className="seg dark" role="toolbar" aria-label="Tools">
           <button type="button" className={p.tool === 'select' ? 'on' : ''} onClick={() => p.setTool('select')} title="Move (V)">
             <IconPointer size={16} /> Move
@@ -126,6 +132,7 @@ export function TopBar(p: Props) {
               <button type="button" onClick={() => (p.onExportPng(), close())}>
                 <IconDownload size={14} /> Save plan as PNG
               </button>
+              <button type="button" onClick={() => (p.onOpenStorage(), close())}>Saving & sync…</button>
               <button type="button" onClick={() => (p.onExportJson(), close())}>Back up everything (JSON)</button>
               <button type="button" onClick={() => (p.onImportJson(), close())}>Restore from backup…</button>
               <hr />
