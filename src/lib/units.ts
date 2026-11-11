@@ -1,11 +1,11 @@
 /** Parses lengths like `64`, `64"`, `5'4"`, `5' 4`, `5ft 4in`, `5.5'`, `160cm` into inches. */
-export function parseLength(input: string): number | null {
+export function parseLength(input: string, allowZero = false): number | null {
   const s = input.trim().toLowerCase().replace(/[”″]/g, '"').replace(/[’′]/g, "'");
   if (!s) return null;
   const cm = s.match(/^(\d+(?:\.\d+)?)\s*cm$/);
   if (cm) {
     const inches = round(parseFloat(cm[1]) / 2.54);
-    return inches > 0 ? inches : null;
+    return inches > 0 || (allowZero && inches === 0) ? inches : null;
   }
   const ftIn = s.match(
     /^(?:(\d+(?:\.\d+)?)\s*(?:'|ft|feet|foot))?\s*(?:(\d+(?:\.\d+)?)\s*(?:"|in|inches|inch)?)?$/,
@@ -14,7 +14,7 @@ export function parseLength(input: string): number | null {
   const ft = ftIn[1] ? parseFloat(ftIn[1]) : 0;
   const inch = ftIn[2] ? parseFloat(ftIn[2]) : 0;
   const total = ft * 12 + inch;
-  return total > 0 ? round(total) : null;
+  return total > 0 || (allowZero && total === 0) ? round(total) : null;
 }
 
 function round(n: number) {

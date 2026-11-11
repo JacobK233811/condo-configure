@@ -25,7 +25,7 @@ export function LengthInput({
   }, [value]);
   const commit = () => {
     const t = text.trim();
-    const v = allowZero && (t === '0' || t === '') ? 0 : parseLength(t);
+    const v = allowZero && t === '' ? 0 : parseLength(t, allowZero);
     if (v === null) {
       setBad(true);
       return;
