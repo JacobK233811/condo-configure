@@ -130,10 +130,13 @@ export function useSync(doc: Doc, replaceDoc: (d: Doc) => void) {
             setStatus('conflict');
           }
         } else {
-          const r = await writeGist(token, undefined, docRef.current);
+          const sent = docRef.current;
+          const r = await writeGist(token, undefined, sent);
           const now = Date.now();
-          setMeta({ gistId: r.id, gistUrl: r.url, remoteUpdatedAt: r.updatedAt, lastSyncedAt: now, lastBackupAt: now, dirty: false });
+          const stillDirty = docRef.current !== sent;
+          setMeta({ gistId: r.id, gistUrl: r.url, remoteUpdatedAt: r.updatedAt, lastSyncedAt: now, lastBackupAt: now, dirty: stillDirty });
           setStatus('synced');
+          if (stillDirty) setTimeout(() => pushRef.current(), PUSH_DELAY);
         }
       } catch (e) {
         fail(e);
