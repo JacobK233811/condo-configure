@@ -79,9 +79,9 @@ export const WALL_RECTS: Rect[] = [
   r(116.5, 148.5, 2.5, 56.5),
   // washer / dryer
   r(90.5, 204.5, 40.5, 3),
-  r(97, 204.5, 2.5, 38),
+  r(90.5, 204.5, 2.5, 38),
   r(128.5, 204.5, 2.5, 38),
-  r(91.5, 240, 39.5, 6.5),
+  r(90.5, 240, 40.5, 6.5),
   r(103, 246, 2.75, 9),
   // bath / shower / foyer closet
   r(103.5, 287, 2.75, 64),
@@ -134,7 +134,7 @@ export const ZONES: Zone[] = [
   { name: 'Walk-in closet', rect: r(6, 148.5, 47.5, 97.5), pattern: 'closet' },
   { name: 'Closet', rect: r(92.75, 148.5, 23.75, 48.5), pattern: 'closet' },
   { name: 'P', rect: r(119, 148.5, 8.5, 56), pattern: 'closet' },
-  { name: 'W/D', rect: r(99.5, 207.5, 29, 32.5), pattern: 'laundry' },
+  { name: 'W/D', rect: r(93, 207.5, 35.5, 32.5), pattern: 'laundry' },
   { name: 'Bath', rect: r(6, 249, 97.5, 102), pattern: 'tile' },
   { name: 'Closet', rect: r(106.25, 295.25, 25, 55.75), pattern: 'closet' },
 ];
@@ -169,7 +169,7 @@ export interface Door {
 }
 export const DOORS: Door[] = [
   { hinge: [183, 353], radius: 36, closed: 180, open: 225 }, // front door
-  { hinge: [91.5, 247.5], radius: 31, closed: 180, open: 225 }, // bath (from bedroom hall)
+  { hinge: [90.5, 247.5], radius: 30, closed: 180, open: 225 }, // bath (from bedroom hall)
   { hinge: [104.75, 287], radius: 32, closed: 270, open: 225 }, // bath (from foyer)
   { hinge: [77, 192], radius: 22.5, closed: 201, open: 133 }, // walk-in
   { hinge: [73.5, 187.5], radius: 19.5, closed: 29, open: -35 }, // reach-in

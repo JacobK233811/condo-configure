@@ -155,7 +155,7 @@ function StaticPlan({ showGrid }: { showGrid: boolean }) {
         <rect x={69.5} y={295.5} width={33.5} height={47} fill="none" strokeDasharray="1.5 1.5" />
       </g>
       {/* laundry + closet rods */}
-      <rect x={100.5} y={211} width={27} height={25} fill="#fff" stroke="#8d8a85" strokeWidth={0.6} rx={1} />
+      <rect x={97} y={211} width={27} height={25} fill="#fff" stroke="#8d8a85" strokeWidth={0.6} rx={1} />
       <g stroke="#a59d91" strokeWidth={0.6} strokeDasharray="2 1.5">
         <line x1={14} y1={156} x2={14} y2={240} />
         <line x1={104} y1={152} x2={104} y2={196} />
