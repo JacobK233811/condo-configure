@@ -71,6 +71,12 @@ export function useSync(doc: Doc, replaceDoc: (d: Doc) => void) {
         return;
       }
       const sent = docRef.current;
+      if (JSON.stringify(remote.doc) === JSON.stringify(sent)) {
+        setMeta({ lastSyncedAt: Date.now(), dirty: false });
+        setError(null);
+        setStatus('synced');
+        return;
+      }
       const r = await writeGist(m.token, m.gistId, sent);
       const now = Date.now();
       const stillDirty = docRef.current !== sent;
