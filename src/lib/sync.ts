@@ -28,7 +28,11 @@ export function loadMeta(): SyncMeta {
 }
 
 export function saveMeta(m: SyncMeta) {
-  localStorage.setItem(META_KEY, JSON.stringify(m));
+  try {
+    localStorage.setItem(META_KEY, JSON.stringify(m));
+  } catch {
+    /* storage full: useDocStore already shows a warning; keep the in-memory copy */
+  }
 }
 
 export class SyncError extends Error {
