@@ -209,6 +209,7 @@ export function analyzeLayout(placements: Placement[], items: Map<string, Item>)
       if (polysOverlap(e.polys, o.polys)) issues.push(`Overlaps ${o.item.name}`);
     }
     if (e.clear) {
+      if (!inBounds([e.clear])) clearanceIssues.push('Front clearance extends off the floor');
       const cHit = new Set<string>();
       for (const b of BLOCKERS) if (polysOverlap([e.clear], [b.poly])) cHit.add(b.label);
       for (const o of entries) {
